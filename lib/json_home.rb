@@ -55,7 +55,7 @@ class JSONHome
     if self.class.ignore_http_errors
       puts e
       self.class.logger.error(e) if self.class.logger
-      @resources = {}
+      @resources = with_namespaces(local_resources)
     else
       raise e
     end
