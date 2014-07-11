@@ -33,7 +33,6 @@ class JSONHome
   end
 
   def reload(local_resources = nil)
-    puts local_resources.inspect
     Net::HTTP.start(@base_uri.host, @base_uri.port) do |http|
       req = if local_resources.is_a?(Hash)
         r = Net::HTTP::Put.new(@base_uri.request_uri)
