@@ -22,7 +22,7 @@ class JSONHome
   DEFAULT_NAMESPACE = 'http://helloworld.innoq.com'
 
   class << self
-    attr_accessor :logger, :ignore_http_errors, :default_namespace
+    attr_accessor :logger, :ignore_http_errors, :default_namespace, :use_additional_params
   end
   self.default_namespace = DEFAULT_NAMESPACE
 
@@ -89,7 +89,16 @@ class JSONHome
         self.warn("Missing key '#{key}' in ForeignLinks#uri call") unless params[key]
         uri = uri.gsub("{#{key}}", params[key].to_s)
       end
-      uri
+      if self.use_additional_params
+        additional_params = URI.encode_www_form params.select{|k, v| unknown_keys.include? k }
+        if uri.include? '?'
+          uri + '&' + additional_params
+        else
+          uri + '?' + additional_params
+        end
+      else
+        uri
+      end
     end
   end
 
