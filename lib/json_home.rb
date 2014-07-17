@@ -89,7 +89,7 @@ class JSONHome
         self.warn("Missing key '#{key}' in ForeignLinks#uri call") unless params[key]
         uri = uri.gsub("{#{key}}", params[key].to_s)
       end
-      if self.use_additional_params
+      if self.use_additional_params and unknown_keys.any?
         additional_params = URI.encode_www_form params.select{|k, v| unknown_keys.include? k }
         if uri.include? '?'
           uri + '&' + additional_params
@@ -103,7 +103,7 @@ class JSONHome
   end
 
   def self.uri?(resources, resource)
-    data = resources[resource.to_s]
+    data = resources[self.with_namespace(resource)]
     data.is_a?(Hash) && (
       data['href'].is_a?(String) ||
           (data['href-template'].is_a?(String) && data['href-vars'].is_a?(Hash))
@@ -114,7 +114,7 @@ class JSONHome
 
   def self.with_namespace(resource)
     if resource.to_s.include?('/')
-      resource
+      resource.to_s
     else
       [self.default_namespace, resource].join('/')
     end
