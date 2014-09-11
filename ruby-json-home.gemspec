@@ -12,25 +12,26 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-# -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
-require "ruby-json-home"
+# encoding: utf-8
+
+$:.push File.expand_path('../lib', __FILE__)
+require 'ruby-json-home'
 
 Gem::Specification.new do |s|
-  s.name        = "ruby-json-home"
+  s.name        = 'ruby-json-home'
   s.version     = RubyJSONHome::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Till Schulte-Coerne"]
-  s.email       = ["till.schulte-coerne@innoq.com"]
-  s.homepage    = "http://github.com/innoq/ruby-json-home"
-  s.summary     = "A client for json-home"
+  s.authors     = ['Till Schulte-Coerne', 'Willem van Kerkhof']
+  s.email       = ['till.schulte-coerne@innoq.com', 'willem.van-kerkhof@innoq.com']
+  s.homepage    = 'http://github.com/innoq/ruby-json-home'
+  s.summary     = 'A client for json-home'
   s.description = s.summary
   s.extra_rdoc_files = ['README.md', 'LICENSE']
 
-  s.add_dependency "bundler"
+  s.add_dependency 'bundler'
 
-  s.files = %w(LICENSE README.md Rakefile ruby-json-home.gemspec) + Dir.glob("{lib,test}/**/*")
-  s.test_files = Dir.glob("{test}/**/*")
-  s.executables = Dir.glob("{bin}/**/*")
-  s.require_paths = ["lib"]
+  s.files = %w(LICENSE README.md Rakefile ruby-json-home.gemspec) + Dir.glob('{lib,test}/**/*')
+  s.test_files    = Dir.glob '{test}/**/*'
+  s.executables   = Dir.glob '{bin}/**/*'
+  s.require_paths = ['lib']
 end
