@@ -33,7 +33,7 @@ class JSONHome
   end
 
   def reload(local_resources = nil)
-    Net::HTTP.start(@base_uri.host, @base_uri.port) do |http|
+    Net::HTTP.start(@base_uri.host, @base_uri.port, :use_ssl => @base_uri.scheme == 'https') do |http|
       req = if local_resources.is_a?(Hash)
         r = Net::HTTP::Put.new(@base_uri.request_uri)
         r.body = JSON.generate('resources' => with_namespaces(local_resources))
