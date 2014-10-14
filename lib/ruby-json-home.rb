@@ -18,7 +18,7 @@ require 'json_home'
 
 module RubyJSONHome
 
-  VERSION = '0.0.3'
+  VERSION = '0.0.4'
 
 end
 
