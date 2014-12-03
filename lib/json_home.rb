@@ -1,4 +1,4 @@
-#   Copyright 2011 innoQ Deutschland GmbH
+#   Copyright 2014 innoQ Deutschland GmbH
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ class JSONHome
       res = http.request(req)
       if res.is_a?(Net::HTTPSuccess)
         @resources = JSON.parse(res.body)['resources'] || {}
-        self.class.logger.info("Found ForeignLinks: #{@resources.keys.inspect}") if self.class.logger
+        self.class.logger.debug("Found ForeignLinks: #{@resources.keys.inspect}") if self.class.logger
       else
         raise RuntimeError.new("HTTP error: '#{res.code} #{res.message}'")
       end
@@ -87,7 +87,7 @@ class JSONHome
       unknown_keys = (params.keys - data['href-vars'].keys)
       self.warn "Unknown keys #{unknown_keys.inspect} in ForeignLinks#uri call" if unknown_keys.any?
       data['href-vars'].each do |key, type_uri|
-        self.warn("Missing key '#{key}' in ForeignLinks#uri call") unless params[key]
+        self.warn("Missing key '#{key}' in ForeignLinks#uri call (rel=#{resource})") unless params[key]
         uri = uri.gsub("{#{key}}", params[key].to_s)
       end
     end
