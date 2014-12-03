@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ruby-json-home (0.0.2)
+    ruby-json-home (0.0.4)
       bundler
 
 GEM
