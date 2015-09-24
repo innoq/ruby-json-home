@@ -22,7 +22,7 @@ class JSONHome
   DEFAULT_NAMESPACE = 'http://helloworld.innoq.com'
 
   class << self
-    attr_accessor :logger, :ignore_http_errors, :default_namespace, :use_additional_params
+    attr_accessor :logger, :ignore_http_errors, :default_namespace, :use_additional_params, :socks_proxy
   end
   self.default_namespace = DEFAULT_NAMESPACE
 
@@ -33,14 +33,14 @@ class JSONHome
   end
 
   def reload(local_resources = nil)
-    Net::HTTP.start(@base_uri.host, @base_uri.port, :use_ssl => @base_uri.scheme == 'https') do |http|
+    net_http.start(@base_uri.host, @base_uri.port, :use_ssl => @base_uri.scheme == 'https') do |http|
       req = if local_resources.is_a?(Hash)
-        r = Net::HTTP::Put.new(@base_uri.request_uri)
+        r = net_http::Put.new(@base_uri.request_uri)
         r.body = JSON.generate('resources' => with_namespaces(local_resources))
         r['Content-Type'] = 'application/json'
         r
       else
-        Net::HTTP::Get.new(@base_uri.request_uri)
+        net_http::Get.new(@base_uri.request_uri)
       end
       req['Accept'] = 'application/json-home'
       res = http.request(req)
@@ -53,7 +53,7 @@ class JSONHome
     end
   rescue Net::HTTPExceptions, Errno::ECONNREFUSED, RuntimeError => e
     if self.class.ignore_http_errors
-      puts e
+#       puts e
       self.class.logger.error(e) if self.class.logger
       @resources = with_namespaces(local_resources)
     else
@@ -113,6 +113,13 @@ class JSONHome
   end
 
   protected
+
+  def net_http
+    if self.class.socks_proxy
+      self.class.logger.debug "Using SOCKS proxy"
+    end
+    self.class.socks_proxy || Net::HTTP
+  end
 
   def self.with_namespace(resource)
     if resource.to_s.include?('/')
